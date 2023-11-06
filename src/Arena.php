@@ -105,7 +105,7 @@ class Arena
         $hero = $this->getHero();
         $monster = $this->monsters[$id];
 
-        if ($this->getDistance($hero, $monster) <= $hero->getRange()) {
+        if ($this->touchable($hero, $monster)) {
             $hero->fight($monster);
 
             if (!$monster->isAlive()) {
@@ -114,12 +114,10 @@ class Arena
 
                 $hero->addExperience($monster->getExperience());
             }
+        }
 
-            if ($monster->isAlive()) {
-                if ($this->getDistance($monster, $hero) <= $monster->getRange()) {
-                    $monster->fight($hero);
-                }
-            }
+        if ($monster->isAlive() && $this->touchable($monster, $hero)) {
+            $monster->fight($hero);
         }
     }
 }
