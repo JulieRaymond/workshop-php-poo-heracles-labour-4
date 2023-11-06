@@ -70,7 +70,7 @@ class Arena
         return $this->size;
     }
 
-    public function move(Fighter $fighter, string $direction)
+    public function move(Fighter $fighter, string $direction): void
     {
         $newX = $fighter->getX();
         $newY = $fighter->getY();
