@@ -2,7 +2,9 @@
 
 namespace App;
 
-class Fighter
+use App\Level;
+
+abstract class Fighter
 {
     public const MAX_LIFE = 100;
 
@@ -14,20 +16,26 @@ class Fighter
     private int $x;
     private int $y;
     protected float $range = 1;
+    private int $experience;
+    private int $level;
+
 
     public function __construct(
         string $name,
         int $strength = 10,
         int $dexterity = 5,
-        string $image = 'fighter.svg'
+        string $image = 'fighter.svg',
+        int $experience = 1000
     ) {
         $this->name = $name;
         $this->strength = $strength;
         $this->dexterity = $dexterity;
         $this->image = $image;
+        $this->experience = $experience;
+        $this->level = Level::calculate($experience);
     }
 
-    
+
     public function getDamage(): int
     {
         $damage = $this->getStrength();
@@ -100,7 +108,7 @@ class Fighter
      */
     public function getStrength(): int
     {
-        return $this->strength;
+        return $this->strength * $this->level;
     }
 
     /**
@@ -117,7 +125,7 @@ class Fighter
      */
     public function getDexterity(): int
     {
-        return $this->dexterity;
+        return $this->dexterity * $this->level;
     }
 
     /**
@@ -131,7 +139,7 @@ class Fighter
 
     /**
      * Get the value of x
-     */ 
+     */
     public function getX(): int
     {
         return $this->x;
@@ -139,7 +147,7 @@ class Fighter
 
     /**
      * Set the value of x
-     */ 
+     */
     public function setX($x): void
     {
         $this->x = $x;
@@ -147,7 +155,7 @@ class Fighter
 
     /**
      * Get the value of y
-     */ 
+     */
     public function getY(): int
     {
         return $this->y;
@@ -155,7 +163,7 @@ class Fighter
 
     /**
      * Set the value of y
-    */ 
+     */
     public function setY($y): void
     {
         $this->y = $y;
@@ -163,9 +171,20 @@ class Fighter
 
     /**
      * Get the value of range
-     */ 
+     */
     public function getRange(): float
     {
         return $this->range;
+    }
+
+    public function addExperience(int $experience)
+    {
+        $this->experience += $experience;
+        $this->updateLevel();
+    }
+
+    public function updateLevel()
+    {
+        $this->level = Level::calculate($this->experience);
     }
 }
